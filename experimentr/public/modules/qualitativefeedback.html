@@ -1,0 +1,26 @@
+<div id="qualitative">
+
+<textarea name="textarea" rows="10" cols="50">Did you change your opinion? Please explain why you did, or didn't.</textarea>
+<br>
+
+<style>
+</style>
+
+<script>
+(function() {
+  var data    = {};
+  experimentr.startTimer('qualitative');
+
+
+  d3.select('#qualitative').select('textarea')
+    .on('change', function() { data.qualitative = this.value; validate(); });
+
+
+  function validate() {
+    if( data.qualitative ) {
+      experimentr.endTimer('qualitative');
+      experimentr.addData(data);
+      experimentr.release();
+  }
+}());
+</script>

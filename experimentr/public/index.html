@@ -32,13 +32,61 @@
     font-weight: bold;
     text-decoration: underline;
   }
+
+
+
+
+  .Violent{
+    fill: red;
+  }
+
+  .Non-violent{
+    fill: blue;
+  }
+
+  .hidden{
+    display: none;
+  }
+
+  table{
+    border:1px solid black;
+    border-spacing: 0px;
+  }
+
+  td, th{
+    border:1px solid black;
+  }
+
+  th{
+    background-color: #c4c4c4;
+  }
+
+  circle{
+    fill:steelblue;
+    z-index:1;
+  }
+
+  line{
+    z-index: 0;
+  }
+
+  .chartTitle{
+    font-weight: bold;
+    width: 100%;
+    text-align: center;
+  }
 </style>
 
 <body></body>
 
 <script>
 experimentr.sequence([
-  'modules/consent.html',
+  'modules/demographics.html',
+  'modules/pretest.html',
+  'modules/evidence.html',
+  'modules/posttest.html',
+  'modules/attentioncheck.html',
+  'modules/qualitativefeedback.html',
   'modules/debrief.html'
 ]).start();
 </script>

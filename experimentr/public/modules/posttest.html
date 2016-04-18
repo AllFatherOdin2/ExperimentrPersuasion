@@ -1,0 +1,48 @@
+<div id="preTest">
+<p>
+To what extent do you agree that violent video games do not contribute towards youth violence? (1: Violent video games absolutely do contribute to youth violence. 7: video games in no way contribute to youth violence)
+</p>
+
+<table>
+<tr>
+  <td align="center">1</td>
+  <td align="center">2</td>
+  <td align="center">3</td>
+  <td align="center">4</td>
+  <td align="center">5</td>
+  <td align="center">6</td>
+  <td align="center">7</td>
+</tr>
+<tr>
+  <td align="center"><input type="radio" name="violence" value="1" /></td>
+  <td align="center"><input type="radio" name="violence" value="2" /></td>
+  <td align="center"><input type="radio" name="violence" value="3" /></td>
+  <td align="center"><input type="radio" name="violence" value="4" /></td>
+  <td align="center"><input type="radio" name="violence" value="5" /></td>
+  <td align="center"><input type="radio" name="violence" value="6" /></td>
+  <td align="center"><input type="radio" name="violence" value="7" /></td>
+</tr>
+</table>
+</div>
+
+
+
+<script>
+(function() {
+  var data = {};
+
+  d3.selectAll('input')
+    .filter(function(d) { return this.name === 'violence' ? this : null; })
+    .on('change', function() { data.violence = this.value; validate(); });
+
+  experimentr.startTimer('preTest');
+
+  function validate() {
+    if(data.violence) {
+      experimentr.endTimer('preTest');
+      experimentr.addData(data);
+      experimentr.release();
+    }
+  }
+}());
+</script>

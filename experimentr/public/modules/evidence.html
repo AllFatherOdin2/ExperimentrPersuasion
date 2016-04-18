@@ -1,0 +1,629 @@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.6/d3.min.js" charset="utf-8"></script>
+
+<!--
+graph the vidoe game csv, once as a staic bar graph, and a table. once as an 
+interactive bar graph (on mouse over to show number and line that compares bar to other bars)
+
+ask not just about feelings on the topic, but also knowledge of the topic
+-->
+
+
+
+	<div id = "evidence" class="evidence">
+		<div class="reasons">
+			<p id="reasonsExplained">
+			</p>
+			<div class="chartTitle"><p>Recorded responses of children for playing computer games (in %)</p></div>
+			<div class="svgReasons hidden">
+			</div>
+			<div class="svgEnchancedReasons hidden">
+			</div>
+			<div class="chartReasons hidden">
+				<table style="width:500px">
+					<thead>
+						<th>Reasons for playing gideo games</th>
+						<th>Agree percentage</th>
+						<th>Reason type</th>
+					</thead>
+					<tbody>
+					  <tr>
+					    <td>It's just fun</td>
+					    <td>94.85</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Something to do when bored</td>
+					    <td>89.05</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>It's exciting</td>
+					    <td>79.8</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Challenge of figuring things out</td>
+					    <td>79.35</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>To complete and win</td>
+					    <td>73.2</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Nothing else to do</td>
+					    <td>64.65</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Helps me relax</td>
+					    <td>53.5</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Create my own world</td>
+					    <td>52.5</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Learn new things</td>
+					    <td>52.25</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>To forget problems</td>
+					    <td>45</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>My friends like to play</td>
+					    <td>36.5</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Teach others to play</td>
+					    <td>34</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>I like to "MOD" games</td>
+					    <td>31.75</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Feel less lonely</td>
+					    <td>29</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Make new friends</td>
+					    <td>14.75</td> 
+					    <td>Non-Violent</td>
+					  </tr>
+					  <tr>
+					    <td>To get my anger out</td>
+					    <td>37</td> 
+					    <td>Violent</td>
+					  </tr>
+					  <tr>
+					    <td>Like guns and weapons</td>
+					    <td>35</td> 
+					    <td>Violent</td>
+					  </tr>
+				 	</tbody>
+				</table>
+			</div>
+		</div>
+		<div>
+			<div class="svgSales"></div>
+			<div class="svgCrime"></div>
+		</div>
+		<br/><br/><br/>
+		<div class="gameMurders">
+			<p id="gameMurdersExplained">
+			</p>
+			<div class="svgCountries hidden">
+			</div>
+			<div class="svgEnhancedCountries hidden">
+			</div>
+			<div class="chartCountries hidden">
+				<table>
+					<thead>
+						<th>Country</th>
+						<th>Murders (per 100,000)</th>
+						<th>Spending (Billions)</th>
+					</thead>
+					<tbody>
+						<tr><td>China</td><td>0</td><td>7</td></tr>
+						<tr><td>United States</td><td>3.2</td><td>45</td></tr>
+						<tr><td>Germany</td><td>0.2</td><td>47</td></tr>
+						<tr><td>Australia</td><td>0.1</td><td>54</td></tr>
+						<tr><td>Japan</td><td>0</td><td>51</td></tr>
+						<tr><td>United Kingdom</td><td>0.1</td><td>60</td></tr>
+						<tr><td>France</td><td>0.1</td><td>63</td></tr>
+						<tr><td>Canada</td><td>0.5</td><td>1</td></tr>
+						<tr><td>South Korea</td><td>0</td><td>102</td></tr>
+						<tr><td>Netherlands</td><td>0.4</td><td>112</td></tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+	<script>
+		console.log(d3); // test if d3 is loaded
+		var showReasonBarGraph, showReasonChart, showReasonEnchanced;
+		
+		var showGameMurdersScatterGraph, showGameMurdersChart, showGameMurdersEnchanced;
+
+		
+
+		showGameMurdersChart = function(){
+			d3.select(".chartCountries")
+			.classed("hidden", false);
+		}
+
+		showGameMurdersScatterGraph = function(){
+			d3.select(".svgCountries")
+			.classed("hidden", false);
+
+			d3.csv('salesMurders.csv', function(err, data) {
+			    var margin = {top: 20, right: 15, bottom: 60, left: 60}
+			      , width = 960 - margin.left - margin.right
+			      , height = 500 - margin.top - margin.bottom;
+			    
+			    var x = d3.scale.linear()
+			              .domain([0, 120])
+			              .range([ 0, width ]);
+			    
+			    var y = d3.scale.linear()
+			    	      .domain([0, 4])
+			    	      .range([ height, 0 ]);
+	 
+			    var chart = d3.select('.svgCountries').append('svg')
+			    .attr('width', width + margin.right + margin.left)
+				.attr('height', height + margin.top + margin.bottom)
+				.attr('class', 'chart');
+
+			    var main = chart.append('g')
+				.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+				.attr('width', width)
+				.attr('height', height)
+				.attr('class', 'main');
+			        
+			    // draw the x axis
+			    var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient('bottom');
+
+			    main.append('g')
+				.attr('transform', 'translate(0,' + height + ')')
+				.attr('class', 'main axis date')
+				.call(xAxis);
+
+			    // draw the y axis
+			    var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient('left');
+
+			    main.append('g')
+				.attr('transform', 'translate(0,0)')
+				.attr('class', 'main axis date')
+				.call(yAxis);
+
+			    var g = main.append("svg:g"); 
+			    
+			    g.append("text")
+	            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+	            .attr("transform", "translate("+ -35 +","+height/2+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+	            .text("Gun Murders Per 100,000");
+
+	            g.append("text")
+	            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+	            .attr("transform", "translate("+ width/2 +","+(height+35)+")")  // text is drawn off the screen top left, move down and out and rotate
+	            .text("Video game sales (billions of $)");
+
+			    g.selectAll("scatter-dots")
+			      .data(data)
+			      .enter().append("svg:circle")
+			          .attr("cx", function (d,i) { return x(d.Spending); } )
+			          .attr("cy", function (d) { return y(d.Murders); } )
+			          .attr("r", 6);
+
+			    g.selectAll("scatter-dots")
+			      .data(data)
+			      .enter().append("text")
+			      .style("text-anchor", "front")
+				    .attr("transform", function(d){
+				    	return "translate(" + x(d.Spending) + "," +(y(d.Murders) - 5) + ") rotate(-50)"
+				    })
+				    /*
+				    .attr("x", function (d,i) { return x(d.Spending);})
+				    .attr("y", function (d) { return y(d.Murders); })
+				    .attr("dy", ".35em")
+				    .attr("dx", ".2em")
+				    */
+		          .text(function(d){return d.Country;});
+			    
+		    });
+
+		}
+
+		showGameMurdersEnchanced = function(){
+			d3.select(".svgEnhancedCountries")
+			.classed("hidden", false);
+
+			d3.csv('salesMurders.csv', function(err, data) {
+			    var margin = {top: 20, right: 15, bottom: 60, left: 60}
+			      , width = 960 - margin.left - margin.right
+			      , height = 500 - margin.top - margin.bottom;
+			    
+			    var x = d3.scale.linear()
+			              .domain([0, 120])
+			              .range([ 0, width ]);
+			    
+			    var y = d3.scale.linear()
+			    	      .domain([0, 4])
+			    	      .range([ height, 0 ]);
+	 
+			    var chart = d3.select('.svgEnhancedCountries').append('svg')
+			    .attr('width', width + margin.right + margin.left)
+				.attr('height', height + margin.top + margin.bottom)
+				.attr('class', 'chart');
+
+			    var main = chart.append('g')
+				.attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+				.attr('width', width)
+				.attr('height', height)
+				.attr('class', 'main');
+
+
+			        
+			    // draw the x axis
+			    var xAxis = d3.svg.axis()
+				.scale(x)
+				.orient('bottom');
+
+			    main.append('g')
+				.attr('transform', 'translate(0,' + height + ')')
+				.attr('class', 'main axis date')
+				.call(xAxis);
+
+			    // draw the y axis
+			    var yAxis = d3.svg.axis()
+				.scale(y)
+				.orient('left');
+
+			    main.append('g')
+				.attr('transform', 'translate(0,0)')
+				.attr('class', 'main axis date')
+				.call(yAxis);
+
+			    var g = main.append("svg:g"); 
+
+			    g.append("text")
+	            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+	            .attr("transform", "translate("+ -35 +","+height/2+")rotate(-90)")  // text is drawn off the screen top left, move down and out and rotate
+	            .text("Gun Murders Per 100,000");
+
+	            g.append("text")
+	            .attr("text-anchor", "middle")  // this makes it easy to centre the text as the transform is applied to the anchor
+	            .attr("transform", "translate("+ width/2 +","+(height+35)+")")  // text is drawn off the screen top left, move down and out and rotate
+	            .text("Video game sales (billions of $)");
+			    
+			    g.selectAll("scatter-dots")
+			      .data(data)
+			      .enter().append("svg:circle")
+			          .attr("cx", function (d,i) { return x(d.Spending); } )
+			          .attr("cy", function (d) { return y(d.Murders); } )
+			          .attr("r", 6)
+			          .on("mouseover", function(d,i){
+			          	d3.select(this.parentNode)
+										.append('line')
+										.classed("clear", true)
+										.attr("x1",x(d.Spending))
+										.attr("x2",x(d.Spending))
+										.attr("y1",0)
+										.attr("y2",height)
+										.style("stroke-width", 2)
+										.style("stroke", "grey")
+										.style("fill", "none");
+
+			          	d3.select(this.parentNode)
+										.append('line')
+										.classed("clear", true)
+										.attr("y1",y(d.Murders))
+										.attr("y2",y(d.Murders))
+										.attr("x1",0)
+										.attr("x2",width)
+										.style("stroke-width", 2)
+										.style("stroke", "grey")
+										.style("fill", "none");
+
+						d3.select(this.parentNode)
+								.append("svg:circle")
+										.classed("clear", true)
+						          .attr("cx", function () { return x(d.Spending); } )
+						          .attr("cy", function () { return y(d.Murders); } )
+						          .attr("r", 6)
+						          .on("mouseout", function(){
+						          	d3.selectAll(".clear")
+						          		.remove();
+						          });
+
+			          });
+
+			    g.selectAll("scatter-dots")
+			      .data(data)
+			      .enter().append("text")
+			      .style("text-anchor", "front")
+				    .attr("transform", function(d){
+				    	return "translate(" + x(d.Spending) + "," +(y(d.Murders) - 5) + ") rotate(-50)"
+				    })
+		          .text(function(d){return d.Country;});
+
+		    });
+
+
+		}
+
+		showReasonChart = function(){
+			d3.select(".chartReasons")
+				.classed("hidden", false);
+		}
+
+		showReasonBarGraph = function(){
+			d3.select(".svgReasons")
+			.classed("hidden", false);
+
+			d3.csv('gameData.csv', function(err, data) {
+				var showPercentage = false;
+
+				var reasons= [];
+
+				var percentage = [];
+
+				var reasonType = []; 
+				for(var i = 0; i < data.length; i++){
+					reasons[i] = data[i].Reasons;
+					percentage[i] = data[i].Percentage;
+					reasonType[i] = data[i].ReasonType;
+					}
+
+				var grid = d3.range(25).map(function(i){
+					return {'x1':0,'y1':0,'x2':0,'y2':480};
+				});
+
+				var tickVals = grid.map(function(d,i){
+					if(i>0){ return i*10; }
+					else if(i===0){ return "100";}
+				});
+
+				var xscale = d3.scale.linear()
+								.domain([0,100])
+								.range([0,722]);
+
+				var yscale = d3.scale.linear()
+								.domain([0,reasons.length])
+								.range([0,480]);
+
+				var canvas = d3.select('.svgReasons')
+								.append('svg')
+								.attr({'width':1000,'height':600});
+
+				var grids = canvas.append('g')
+								  .attr('id','grid')
+								  .attr('transform','translate(225,10)')
+								  .selectAll('line')
+								  .data(grid)
+								  .enter()
+								  .append('line')
+								  .attr({'x1':function(d,i){ return i*30; },
+										 'y1':function(d){ return d.y1; },
+										 'x2':function(d,i){ return i*30; },
+										 'y2':function(d){ return d.y2; },
+									})
+								  .style({'stroke':'white','stroke-width':'1px'});
+
+				var	xAxis = d3.svg.axis();
+					xAxis
+						.orient('bottom')
+						.scale(xscale)
+						.tickValues(tickVals);
+
+				var	yAxis = d3.svg.axis();
+					yAxis
+						.orient('left')
+						.scale(yscale)
+						.tickSize(2)
+						.tickFormat(function(d,i){ return reasons[i]; })
+						.tickValues(d3.range(reasons.length));
+
+				var y_xis = canvas.append('g')
+								  .attr("transform", "translate(225,20)")
+								  .attr('id','yaxis')
+								  .call(yAxis);
+
+				var x_xis = canvas.append('g')
+								  .attr("transform", "translate(225,480)")
+								  .attr('id','xaxis')
+								  .call(xAxis);
+
+				var chart = canvas.append('g')
+									.attr("transform", "translate(225,-10)")
+									.attr('id','bars')
+									.selectAll('rect')
+									.data(percentage)
+									.enter()
+									.append('rect')
+									.attr('height',15)
+									.attr({'x':0,'y':function(d,i){ return yscale(i)+23; }})
+									.attr('width',function(d){ return 0; })
+									.attr("class", function(d,i){return reasonType[i];});
+
+
+				var transit = d3.select("svg").selectAll("rect")
+								    .data(percentage)
+								    .transition()
+								    .duration(0) 
+								    .attr("width", function(d) {return xscale(d); });
+
+				var transitext = d3.select('#bars')
+									.selectAll('text')
+									.data(percentage)
+									.enter()
+									.append('text')
+									.attr({'x':function(d) {return xscale(d)-50; },'y':function(d,i){ return yscale(i)+35; }})
+									.text(function(d){ if(showPercentage){ return d+"%";} return ""; }).style({'fill':'#fff','font-size':'14px'})
+
+			});
+		}
+
+		showReasonEnchanced = function(){
+			d3.select(".svgEnchancedReasons")
+			.classed("hidden", false);
+
+			d3.csv('gameData.csv', function(err, data) {
+				var showPercentage = false;
+
+				var reasons= [];
+
+				var percentage = [];
+
+				var reasonType = []; 
+				for(var i = 0; i < data.length; i++){
+					reasons[i] = data[i].Reasons;
+					percentage[i] = data[i].Percentage;
+					reasonType[i] = data[i].ReasonType;
+					}
+
+				var grid = d3.range(25).map(function(i){
+					return {'x1':0,'y1':0,'x2':0,'y2':480};
+				});
+
+				var tickVals = grid.map(function(d,i){
+					if(i>0){ return i*10; }
+					else if(i===0){ return "100";}
+				});
+
+				var xscale = d3.scale.linear()
+								.domain([0,100])
+								.range([0,722]);
+
+				var yscale = d3.scale.linear()
+								.domain([0,reasons.length])
+								.range([0,480]);
+
+				var canvas = d3.select('.svgEnchancedReasons')
+								.append('svg')
+								.attr({'width':1000,'height':500});
+
+				var grids = canvas.append('g')
+								  .attr('id','grid')
+								  .attr('transform','translate(225,10)')
+								  .selectAll('line')
+								  .data(grid)
+								  .enter()
+								  .append('line')
+								  .attr({'x1':function(d,i){ return i*30; },
+										 'y1':function(d){ return d.y1; },
+										 'x2':function(d,i){ return i*30; },
+										 'y2':function(d){ return d.y2; },
+									})
+								  .style({'stroke':'white','stroke-width':'1px'});
+
+				var	xAxis = d3.svg.axis();
+					xAxis
+						.orient('bottom')
+						.scale(xscale)
+						.tickValues(tickVals);
+
+				var	yAxis = d3.svg.axis();
+					yAxis
+						.orient('left')
+						.scale(yscale)
+						.tickSize(2)
+						.tickFormat(function(d,i){ return reasons[i]; })
+						.tickValues(d3.range(reasons.length));
+
+				var y_xis = canvas.append('g')
+								  .attr("transform", "translate(225,20)")
+								  .attr('id','yaxis')
+								  .call(yAxis);
+
+				var x_xis = canvas.append('g')
+								  .attr("transform", "translate(225,480)")
+								  .attr('id','xaxis')
+								  .call(xAxis);
+
+				var chart = canvas.append('g')
+									.attr("transform", "translate(225,-10)")
+									.attr('id','bars')
+									.selectAll('rect')
+									.data(percentage)
+									.enter()
+									.append('rect')
+									.attr('height',19)
+									.attr({'x':0,'y':function(d,i){ return yscale(i)+19; }})
+									.attr("width", function(d) {return xscale(d); })
+									.attr("class", function(d,i){return reasonType[i];})
+									.on("mouseover", function(d,i){
+										d3.select(this.parentNode)
+										.append('text')
+										.attr({'x':function() {return xscale(d)-50; },'y':function(){ return yscale(i)+35; }})
+										.text(function(){ return d+"%";}).style({'fill':'#fff','font-size':'14px'})
+										.classed("valueText", true);
+
+										d3.select(this.parentNode)
+										.append('line')
+										.classed("valueText", true)
+										.attr("x1",xscale(d))
+										.attr("x2",xscale(d))
+										.attr("y1",0)
+										.attr("y2",800)
+										.style("stroke-width", 2)
+										.style("stroke", "grey")
+										.style("fill", "none");
+
+									})
+									.on("mouseout", function(){
+										d3.selectAll(".valueText")
+										.remove();
+									});
+			});
+
+		}
+
+		var num = Math.floor(Math.random() * 3) + 1
+		var visType = "";  
+		var reasons = "In a 2007 scientific study conducted by a group of researchers in the United States, 1254 children (53% female, 47% male) were asked if they play video games or not. To 1126 children who reported playing video games, 17 possible reasons for playing video games were presented. The children then selected one or more reasons for playing video games. It was found that the majority of children play video games for recreational purposes rather then violence initive reasons. The statistics of the survey are shown in the ";
+		var gameMurders = "In another study conducted in 2012, a comparison between juvenile crimes and video game sales in ten different countries, including the United States, was performed. The results show that more juvenile murders happened in the United States as compared to all contrious, independent of video game sales. The findings of the study are shown in the ";
+		console.log(num);
+		if(num == 1){
+			showReasonBarGraph();
+			showGameMurdersScatterGraph();
+			visType = "graph";
+		} else if(num == 2){
+			showReasonEnchanced();
+			showGameMurdersEnchanced();
+			visType = "interactive graph"
+		} else{
+			showReasonChart();
+			showGameMurdersChart();
+			visType = "chart";
+		}
+
+		reasons += visType;
+		gameMurders += visType
+		reasons += " below."
+		gameMurders += " below."
+
+		d3.select("#reasonsExplained").html(reasons);
+		d3.select("#gameMurdersExplained").html(reasons);
+  		var data = {};
+  		data.visType = visType;
+      	experimentr.addData(data);
+	    experimentr.release();
+
+	</script>

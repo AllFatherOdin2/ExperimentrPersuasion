@@ -1,0 +1,53 @@
+
+<div id = "attentionCheck">
+	<div id="topic">What was the general topic of the readings?
+	    <div id="topics">
+	        <input type="radio" id="a1" name="topic" value="Movies"> Movies
+	        <input type="radio" id="a2" name="topic" value="VideoGames"> Video Games
+	        <input type="radio" id="a3" name="topic" value="Books"> Books
+	    </div>
+	</div>
+	<br>
+	<div id="displayType">What type of graphic was displayed for evidence?
+	    <div id="displays">
+	        <input type="radio" id="s1" name="displayType" value="graphs"> Graphs
+	        <input type="radio" id="s2" name="displayType" value="tables"> Tables
+	    </div>
+	</div>
+	<br>
+	<div id="subtopic">What were we exploring about the topic?
+	    <div id="subtopics">
+	        <input type="radio" id="d1" name="subtopic" value="violence"> Violence
+	        <input type="radio" id="d2" name="subtopic" value="sleep"> Sleeping Habits
+	        <input type="radio" id="d3" name="subtopic" value="happiness"> Happiness
+	        <input type="radio" id="d4" name="subtopic" value="violence"> Violence
+	    </div>
+	</div>
+</div>
+
+<script> 
+(function() {
+  var data = {};
+  experimentr.startTimer('attentionCheck');
+  
+  d3.selectAll('input')
+  .filter(function(d) { return this.name === 'topic' ? this : null; })
+  .on('change', function() { data.topic = this.value; validate(); });
+  
+  d3.selectAll('input')
+  .filter(function(d) { return this.name === 'displayType' ? this : null; })
+  .on('change', function() { data.displayType = this.value; validate(); });
+  
+  d3.selectAll('input')
+  .filter(function(d) { return this.name === 'subtopic' ? this : null; })
+  .on('change', function() { data.subtopic = this.value; validate(); });
+  
+  function validate() {
+	  if(data.topic && data.displayType && data.subtopic) {
+	    experimentr.endTimer('attentionCheck');
+	    experimentr.addData(data);
+	    experimentr.release();
+	  }
+	}
+}());
+</script>
