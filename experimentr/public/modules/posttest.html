@@ -1,31 +1,48 @@
-<div id="preTest">
 <p>
-To what extent do you agree that violent video games do not contribute towards youth violence? (1: Violent video games absolutely do contribute to youth violence. 7: video games in no way contribute to youth violence)
+To what extent do you agree that violent video games do not contribute towards youth violence?
 </p>
+<!--  (1: Violent video games absolutely do contribute to youth violence. 7: video games in no way contribute to youth violence) -->
 
-<table>
-<tr>
-  <td align="center">1</td>
-  <td align="center">2</td>
-  <td align="center">3</td>
-  <td align="center">4</td>
-  <td align="center">5</td>
-  <td align="center">6</td>
-  <td align="center">7</td>
-</tr>
-<tr>
-  <td align="center"><input type="radio" name="violence" value="1" /></td>
-  <td align="center"><input type="radio" name="violence" value="2" /></td>
-  <td align="center"><input type="radio" name="violence" value="3" /></td>
-  <td align="center"><input type="radio" name="violence" value="4" /></td>
-  <td align="center"><input type="radio" name="violence" value="5" /></td>
-  <td align="center"><input type="radio" name="violence" value="6" /></td>
-  <td align="center"><input type="radio" name="violence" value="7" /></td>
-</tr>
-</table>
+<div class="container">
+  <div style="width:20%">
+    <a>Video games do contribute to youth violence</a>
+  </div>
+  <div style="width:60%">
+    <table class="noborder">
+    <tr>
+      <td align="center"><input type="radio" name="violence" value="1" /></td>
+      <td align="center"><input type="radio" name="violence" value="2" /></td>
+      <td align="center"><input type="radio" name="violence" value="3" /></td>
+      <td align="center"><input type="radio" name="violence" value="4" /></td>
+      <td align="center"><input type="radio" name="violence" value="5" /></td>
+      <td align="center"><input type="radio" name="violence" value="6" /></td>
+      <td align="center"><input type="radio" name="violence" value="7" /></td>
+    </tr>
+    </table>
+  </div>
+  <div style="width:20%">
+    <a>Video games in no way contribute to youth violence</a>
+  </div>
 </div>
 
 
+<style type="text/css">
+  .noborder{
+    border:none;
+    width:100%;
+  }
+  .noborder td{
+    border:none;
+  }
+
+  .container{
+    height:20px;
+  }
+
+  .container div{
+    float:left;
+  }
+</style>
 
 <script>
 (function() {

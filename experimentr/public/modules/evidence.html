@@ -7,7 +7,11 @@ interactive bar graph (on mouse over to show number and line that compares bar t
 ask not just about feelings on the topic, but also knowledge of the topic
 -->
 
-
+<style type="text/css">
+	.svgEnchancedReasons, .svgReasons, .svgCountries, .svgEnhancedCountries{
+		text-align: center;
+	}
+</style>
 
 	<div id = "evidence" class="evidence">
 		<div class="reasons">
@@ -170,7 +174,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 
 			d3.csv('salesMurders.csv', function(err, data) {
 			    var margin = {top: 20, right: 15, bottom: 60, left: 60}
-			      , width = 960 - margin.left - margin.right
+			      , width = 700 - margin.left - margin.right
 			      , height = 500 - margin.top - margin.bottom;
 			    
 			    var x = d3.scale.linear()
@@ -256,7 +260,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 
 			d3.csv('salesMurders.csv', function(err, data) {
 			    var margin = {top: 20, right: 15, bottom: 60, left: 60}
-			      , width = 960 - margin.left - margin.right
+			      , width = 700 - margin.left - margin.right
 			      , height = 500 - margin.top - margin.bottom;
 			    
 			    var x = d3.scale.linear()
@@ -392,7 +396,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 					}
 
 				var grid = d3.range(25).map(function(i){
-					return {'x1':0,'y1':0,'x2':0,'y2':480};
+					return {'x1':0,'y1':0,'x2':0,'y2':300};
 				});
 
 				var tickVals = grid.map(function(d,i){
@@ -402,7 +406,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 
 				var xscale = d3.scale.linear()
 								.domain([0,100])
-								.range([0,722]);
+								.range([0,450]);
 
 				var yscale = d3.scale.linear()
 								.domain([0,reasons.length])
@@ -410,7 +414,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 
 				var canvas = d3.select('.svgReasons')
 								.append('svg')
-								.attr({'width':1000,'height':600});
+								.attr({'width':700,'height':600});
 
 				var grids = canvas.append('g')
 								  .attr('id','grid')
@@ -419,9 +423,9 @@ ask not just about feelings on the topic, but also knowledge of the topic
 								  .data(grid)
 								  .enter()
 								  .append('line')
-								  .attr({'x1':function(d,i){ return i*30; },
+								  .attr({'x1':function(d,i){ return i*20; },
 										 'y1':function(d){ return d.y1; },
-										 'x2':function(d,i){ return i*30; },
+										 'x2':function(d,i){ return i*20; },
 										 'y2':function(d){ return d.y2; },
 									})
 								  .style({'stroke':'white','stroke-width':'1px'});
@@ -499,7 +503,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 					}
 
 				var grid = d3.range(25).map(function(i){
-					return {'x1':0,'y1':0,'x2':0,'y2':480};
+					return {'x1':0,'y1':0,'x2':0,'y2':300};
 				});
 
 				var tickVals = grid.map(function(d,i){
@@ -509,7 +513,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 
 				var xscale = d3.scale.linear()
 								.domain([0,100])
-								.range([0,722]);
+								.range([0,450]);
 
 				var yscale = d3.scale.linear()
 								.domain([0,reasons.length])
@@ -517,7 +521,7 @@ ask not just about feelings on the topic, but also knowledge of the topic
 
 				var canvas = d3.select('.svgEnchancedReasons')
 								.append('svg')
-								.attr({'width':1000,'height':500});
+								.attr({'width':700,'height':500});
 
 				var grids = canvas.append('g')
 								  .attr('id','grid')
@@ -603,15 +607,15 @@ ask not just about feelings on the topic, but also knowledge of the topic
 		if(num == 1){
 			showReasonBarGraph();
 			showGameMurdersScatterGraph();
-			visType = "graph";
+			visType = "graphs";
 		} else if(num == 2){
 			showReasonEnchanced();
 			showGameMurdersEnchanced();
-			visType = "interactive graph"
+			visType = "interactive graphs"
 		} else{
 			showReasonChart();
 			showGameMurdersChart();
-			visType = "chart";
+			visType = "charts";
 		}
 
 		reasons += visType;
