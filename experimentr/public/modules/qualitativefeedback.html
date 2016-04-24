@@ -17,6 +17,10 @@
   d3.select('#qualitative').select('textarea')
     .on('change', function() { data.qualitative = this.value; validate(); });
 
+  d3.select('#qualitative').select('textarea')
+    .on('keypress', function() { data.qualitative = this.value; validate(); })
+    .on('blur', function() { data.qualitative = this.value; validate(); });
+
 
   function validate() {
     if( data.qualitative ) {

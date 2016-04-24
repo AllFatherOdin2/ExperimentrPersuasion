@@ -9,7 +9,11 @@
 To what extent would you rate your knowledge on the topic of violence in video games (1: I know absolutely knowing about this topic. 7: I've researched this topic in depth)
 </p>
 
-   <div style="display:inline"><a style="vertical-align:super">1</a><input type="range" name="knowledge" min="1" max="7"><a style="vertical-align:super">7<a/></div> 
+   <div>
+      <a style="vertical-align:super">1</a>
+      <input type="range" name="knowledge" min="1" max="7">
+      <a style="vertical-align:super">7<a/>
+    </div> 
 
 <!--
 <table>
@@ -65,6 +69,7 @@ To what extent do you agree that violent video games do not contribute towards y
 <script>
 (function() {
   var data = {};
+  data.preknowledge = 4;
 
   d3.selectAll('input')
     .filter(function(d) { return this.name === 'knowledge' ? this : null; })

@@ -33,12 +33,12 @@ To what extent do you agree that violent video games do not contribute towards y
 
   d3.selectAll('input')
     .filter(function(d) { return this.name === 'violence' ? this : null; })
-    .on('change', function() { data.violence = this.value; validate(); });
+    .on('change', function() { data.postviolence = this.value; validate(); });
 
   experimentr.startTimer('preTest');
 
   function validate() {
-    if(data.violence) {
+    if(data.postviolence) {
       experimentr.endTimer('preTest');
       experimentr.addData(data);
       experimentr.release();

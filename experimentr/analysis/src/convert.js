@@ -5,8 +5,6 @@ var j2c    = require('json2csv')
   , fields = [ // EDIT THESE
       'workerId',
       'postId',
-      'primingType',
-      'valenceDiff',
       'time_diff_experiment'
     ]
   , data
