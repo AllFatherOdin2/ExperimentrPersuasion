@@ -25,6 +25,8 @@ var j2c    = require('json2csv')
       'displayType',
       'subtopic',
       'postviolence',
+      'time_start_postTest',
+      'time_start_preTest',
       'time_start_qualitative',
       'time_end_qualitative',
       'time_diff_qualitative',

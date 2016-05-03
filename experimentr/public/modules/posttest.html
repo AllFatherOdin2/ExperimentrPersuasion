@@ -52,11 +52,11 @@ To what extent do you agree that violent video games do not contribute towards y
     .filter(function(d) { return this.name === 'violence' ? this : null; })
     .on('change', function() { data.postviolence = this.value; validate(); });
 
-  experimentr.startTimer('preTest');
+  experimentr.startTimer('postTest');
 
   function validate() {
     if(data.postviolence) {
-      experimentr.endTimer('preTest');
+      experimentr.endTimer('postTest');
       experimentr.addData(data);
       experimentr.release();
     }
