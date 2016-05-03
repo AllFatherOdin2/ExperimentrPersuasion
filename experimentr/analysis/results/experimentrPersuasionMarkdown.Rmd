@@ -1,0 +1,75 @@
+---
+title: "experimentrPersuasion"
+author: "John Bosworth"
+date: "May 2, 2016"
+output: pdf_document
+---
+
+## Experiment Details
+## Loading and Setup
+```{r, echo=FALSE}
+source("persuasionAnalysis.R")  
+data <- read.csv("data.csv")
+```
+
+## Conversions and Filtering
+```{r}
+data$time_diff_experiment <- data$time_diff_experiment/1000 
+data$time_diff_demo <- data$time_diff_demo/1000 
+data$time_diff_preTest <- data$time_diff_preTest/1000 
+data$time_diff_attentionCheck <- data$time_diff_attentionCheck/1000
+#data$time_diff_postTest <- data$time_diff_postTest/1000 
+data$time_diff_qualitative <- data$time_diff_qualitative/1000
+
+#seperate out attentioncheck
+correct1Data <- subset(data, topic=="VideoGames")
+correct2Data <- subset(correct1Data, subtopic=="violence")
+
+# seperate by graph type
+charts <- subset(correct2Data, visType=="charts")
+interactiveGraphs <- subset(correct2Data, visType=="interactive graphs")
+graphs <- subset(correct2Data, visType=="graphs")
+
+#seperate out the correct attention check
+correctCharts <- subset(charts, displayType=="tables")
+correctInteractiveGraphs <- subset(interactiveGraphs, displayType=="graphs")
+correctGraphs <- subset(graphs, displayType=="graphs")
+
+```
+
+##Histograms
+```{r}
+report(correct2Data, "time_diff_experiment")
+ggplot(correct2Data, aes(time_diff_experiment)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(time_diff_demo)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(time_diff_preTest)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(time_diff_attentionCheck)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
+#ggplot(correct2Data, aes(time_diff_postTest)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(time_diff_qualitative)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(sex)) + geom_bar(stat = "count")
+ggplot(correct2Data, aes(sex)) + geom_bar(stat = "count") + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(age)) + geom_bar(stat = "count")
+ggplot(correct2Data, aes(age)) + geom_bar(stat = "count") + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(degree)) + geom_bar(stat = "count")
+ggplot(correct2Data, aes(degree)) + geom_bar(stat = "count") + facet_grid(. ~ visType)
+
+
+ggplot(correct2Data, aes(previolence)) + geom_bar(stat = "count")
+ggplot(correct2Data, aes(previolence)) + geom_bar(stat = "count") + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(postviolence)) + geom_bar(stat = "count")
+ggplot(correct2Data, aes(postviolence)) + geom_bar(stat = "count") + facet_grid(. ~ visType)
+```
+
+##Densities of opinions
+```{r}
+ggplot(correct2Data, aes(preknowledge,   fill=visType))   + geom_density( alpha=0.5 )
+ggplot(correct2Data, aes(previolence,   fill=visType))   + geom_density( alpha=0.5 )
+ggplot(correct2Data, aes(postviolence,   fill=visType))   + geom_density( alpha=0.5 )
+
+correct2Data$new <- correct2Data$postviolence - correct2Data$previolence
+
+#graph showing change from pretest (0) to posttest(1)
+ggplot(correct2Data, aes(stage, value)) + geom_segment(aes(x = 0, y = previolence, xend = 1, yend = postviolence), data = correct2Data) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(stage, value)) + geom_segment(aes(x = 0, y = previolence, xend = 1, yend = postviolence), data = correct2Data)
+```
+
