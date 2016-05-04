@@ -1,13 +1,6 @@
 library(ggplot2)
-library(dplyr)
-library(coin)
-library(pwr)
-library(shiny)
-library(miniUI)
-library(boot)
-library(tidyr)
-library(irr)
-library("reshape2")
+library(plyr)
+
 
 # Reporting
 report <- function(data, attr) {
@@ -16,4 +9,34 @@ report <- function(data, attr) {
       "Mdn=", round( median( data[[attr]] ), 1), ",", 
       "mad=", round( mad( data[[attr]] )   , 1), 
       sep="")
+}
+
+#data manipulation for counting
+changeStatistics <- function(data, attr) {
+  data[[attr]] <- sapply(data[[attr]], function(x) {
+    if (x > 0)
+      1
+    else if (x < 0)
+      -1
+    else
+      0
+  })
+  
+  rowCount <- length(data[[attr]])
+  negative <- sum(data[[attr]] < 0)
+  zero <- sum(data[[attr]] == 0)
+  positive <- sum(data[[attr]] > 0)
+  
+  negPercent <- negative/rowCount * 100
+  zeroPercent <- zero/rowCount * 100
+  posPercent <- positive/rowCount * 100
+  
+  cat("total=", round(rowCount) , ", ",
+      "Neg=", negative, "/", rowCount, " (", round(negPercent, 2), "%), ", 
+      "zero=",  zero, "/", rowCount, " (", round(zeroPercent, 2), "%), ", 
+      "positive=", positive, "/", rowCount, " (", round(posPercent, 2), "%)", 
+      sep="")
+  
+  
+  data[[attr]]
 }

@@ -24,6 +24,7 @@ data$time_diff_qualitative <- data$time_diff_qualitative/1000
 #seperate out attentioncheck
 correct1Data <- subset(data, topic=="VideoGames")
 correct2Data <- subset(correct1Data, subtopic=="violence")
+correct2Data$opinionChange <- correct2Data$postviolence - correct2Data$previolence
 
 # seperate by graph type
 charts <- subset(correct2Data, visType=="charts")
@@ -35,13 +36,16 @@ correctCharts <- subset(charts, displayType=="tables")
 correctInteractiveGraphs <- subset(interactiveGraphs, displayType=="graphs")
 correctGraphs <- subset(graphs, displayType=="graphs")
 
+correct2Data <- rbind(correctCharts, correctInteractiveGraphs)
+correct2Data <- rbind(correct2Data, correctGraphs)
+
 ```
 
 ##Histograms
 ```{r}
 report(correct2Data, "time_diff_experiment")
-ggplot(correct2Data, aes(time_diff_experiment)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
-ggplot(correct2Data, aes(time_diff_demo)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(time_diff_experiment)) + geom_histogram( binwidth=100 ) + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(time_diff_demo)) + geom_histogram( binwidth=100 ) + facet_grid(. ~ visType)
 ggplot(correct2Data, aes(time_diff_preTest)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
 ggplot(correct2Data, aes(time_diff_attentionCheck)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
 #ggplot(correct2Data, aes(time_diff_postTest)) + geom_histogram( binwidth=5 ) + facet_grid(. ~ visType)
@@ -66,10 +70,33 @@ ggplot(correct2Data, aes(preknowledge,   fill=visType))   + geom_density( alpha=
 ggplot(correct2Data, aes(previolence,   fill=visType))   + geom_density( alpha=0.5 )
 ggplot(correct2Data, aes(postviolence,   fill=visType))   + geom_density( alpha=0.5 )
 
-correct2Data$new <- correct2Data$postviolence - correct2Data$previolence
+```
 
-#graph showing change from pretest (0) to posttest(1)
+```{r}
+#statistics
+correct2Data$opinionChangeDirection <- correct2Data$opinionChange
+correct2Data$opinionChangeDirection <- changeStatistics(correct2Data, "opinionChangeDirection")
+
+correctGraphs$opinionChangeDirection <- correctGraphs$opinionChange
+correctGraphs$opinionChangeDirection <- changeStatistics(correctGraphs, "opinionChangeDirection")
+
+correctInteractiveGraphs$opinionChangeDirection <- correctInteractiveGraphs$opinionChange
+correctInteractiveGraphs$opinionChangeDirection <- changeStatistics(correctInteractiveGraphs, "opinionChangeDirection")
+
+correctCharts$opinionChangeDirection <- correctCharts$opinionChange
+correctCharts$opinionChangeDirection <- changeStatistics(correctCharts, "opinionChangeDirection")
+
+#graphs of how people changed their minds
+ggplot(correct2Data, aes(opinionChange)) + geom_bar()
+ggplot(correct2Data, aes(opinionChange)) + geom_bar() + facet_grid(. ~ visType)
+ggplot(correct2Data, aes(opinionChange,   fill=visType))   + geom_density( alpha=0.5 )
+
+ggplot(correct2Data, aes(opinionChangeDirection)) + geom_bar()
+ggplot(correct2Data, aes(opinionChangeDirection)) + geom_bar() + facet_grid(. ~ visType)
+
+#Graphs showing how people change their minds from pre (0) to post (1)
 ggplot(correct2Data, aes(stage, value)) + geom_segment(aes(x = 0, y = previolence, xend = 1, yend = postviolence), data = correct2Data) + facet_grid(. ~ visType)
 ggplot(correct2Data, aes(stage, value)) + geom_segment(aes(x = 0, y = previolence, xend = 1, yend = postviolence), data = correct2Data)
+
 ```
 
